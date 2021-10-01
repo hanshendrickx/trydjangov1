@@ -119,3 +119,45 @@ Open the browser at http://127.0.0.1:8000/admin, login with your Users-Name and 
 
 By clicking on Django Documentation you enter the offical 1000+ pages of the documentation V 3.2.x! Register for free to be able to connect to the community of millions of programmers etc.
 
+Video 10-11: Create first web page at https://www.youtube.com/playlist?list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL
+Create trydjango/views.py file in VSCode. Place the following code there:
+STEP 1: in VSCode add Python for VSCode (install the plugin from the icon with blocks left side)
+Step 2: add code
+--------------------------------
+"""
+To render html web pages
+"""
+from django.http import HttpResponse
+
+HTML_STRING = """
+<h1>Hello World</h1>
+"""
+
+def home_view(request):
+    """
+    Take in a request (Django sends request)
+    Return HTML as a respons (We pick to return the respons)
+    """
+    print(1000 * 100 ) #python code
+
+    return HttpResponse(HTML_STRING)
+--------------------------------
+
+STEP 3: create the URL routing for the webpage, handle first URL-Routing
+In trydjango/urls.py replace line 16 and a few by:
+
+--------------------------------
+from django.contrib import admin
+from django.urls import path
+
+from .views import home_view
+
+urlpatterns = [
+    path('', home_view), # index/home/root
+    path('admin/', admin.site.urls),
+]
+--------------------------------
+
+Run de server: python mange.py runserver
+Open http://127.0.0.1:8000/ and view the 'Hello World' message!
+
