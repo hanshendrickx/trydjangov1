@@ -199,4 +199,65 @@ Operations to perform:
 Running migrations:
   Applying articles.0001_initial... OK
 
-  
+Video 15-16 Writing data to DB into title and content fields  
+STEP 1: Add interactive coding to trydjango.views.py 
+
+Use the Python Shell: (CTRL-C first, cls) to work in your env (use manage.py! to enter your django project)
+--------------------------------
+cls 
+python manage.py shell 
+from articles.models import Article
+obj = Article(title='This is my first title', content='Hello world')  
+obj.save()
+obj2 = Article.objects.create(title='This is my other title', content='Hello again')
+obj.id
+obj2.id                                                               
+obj3 = Article()
+obj3.title = "Another title"
+obj3.content = "some more content"
+obj.save()
+obj3
+obj3.save()
+obj3
+obj3.id
+3
+a = Article.objects.get(id=1)
+a.title
+a.content
+--------------------------------
+Start the browser. That shows in the browser: Hello This is my other title (id: 2)
+Hello again!
+
+Change the code in trydjang.views.py:
+--------------------------------
+"""
+To render html web pages
+"""
+import random
+from django.http import HttpResponse
+from articles.models import Article
+def home_view(request):
+    """
+    Take in a request (Django sends request)
+    Return HTML as a respons (We pick to return the respons)
+    """
+    name = "justin"
+    random_id = random.randint(1, 4)
+    article_obj = Article.objects.get(id=random_id)
+    article_obj = Article.objects.get(id=2)
+    # Django Templates
+    H1_STRING = f"""
+    <h1>Hello {article_obj.title} (id: {article_obj.id})</h1>
+    """
+    P_STRING = f"""
+    <p> {article_obj.content}!</p>
+    """
+    HTML_STRING = H1_STRING + P_STRING
+    return HttpResponse(HTML_STRING)
+--------------------------------
+
+There is an error in the first article obj. Restart the website several times and you will see that all are in place.
+
+For detailed codes from video look into following github address: https://github.com/codingforentrepreneurs/Try-Django-3.2/blob/main/references/Writing%20%26%20Reading%20Data%20via%20models.md
+
+
