@@ -163,3 +163,40 @@ Open http://127.0.0.1:8000/ and view the 'Hello World' message!
 
 
 Video 12: Enriching Views
+Some extra coding in views.py with random and extra python
+
+Video 13: traydjango.views.py Dynamic data from the database, not from views.py file
+articles.views.py add models title and content
+--------------------------------
+from django.shortcuts import render
+
+# Create your views here.
+class Article(models.Model):
+    title = models.TextField()
+    content = models.TextField()
+--------------------------------
+
+Video 14: Place articles in settings.py & Migrate the models title and content
+STEP 1
+--------------------------------
+.....#under INSTALLED APPS (remove this line).......
+    'django.contrib.staticfiles',
+    'articles',
+]
+--------------------------------
+
+In de django-package code at C:\Users\hansh\anaconda3\envs\Django-Try-V1\Lib\site-packages\django\contrib you will find all installed apps.
+STEP 2
+Migrate after closing the browser CTRL-C
+--------------------------------
+python manage.py makemigrations
+python manage.py migrate
+--------------------------------
+This results into:
+(Django-Try-V1) C:\Users\hansh\anaconda3\envs\Django-Try-V1\trydjangov1>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, articles, auth, contenttypes, sessions
+Running migrations:
+  Applying articles.0001_initial... OK
+
+  
