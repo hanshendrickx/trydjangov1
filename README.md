@@ -161,3 +161,5 @@ urlpatterns = [
 Run de server: python mange.py runserver
 Open http://127.0.0.1:8000/ and view the 'Hello World' message!
 
+
+Video 12: Enriching Views
