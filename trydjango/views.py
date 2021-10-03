@@ -16,7 +16,7 @@ def home_view(request):
     random_id = random.randint(2, 3)
     article_obj = Article.objects.get(id=random_id)
 
-    article_obj = Article.objects.get(id=2)
+    article_obj = Article.objects.get(id=random_id)
 
     # Django Templates
     H1_STRING = f"""
