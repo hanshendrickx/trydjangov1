@@ -256,8 +256,164 @@ def home_view(request):
     return HttpResponse(HTML_STRING)
 --------------------------------
 
-There is an error in the first article obj. Restart the website several times and you will see that all are in place.
 
 For detailed codes from video look into following github address: https://github.com/codingforentrepreneurs/Try-Django-3.2/blob/main/references/Writing%20%26%20Reading%20Data%20via%20models.md
 
 
+Video 17 templates
+Create a folder TRYDJANGOV1.templates with 2 files. Add base.html and home-view.html
+
+Replace and paste following parts the trydjango.views.py code:
+--------------------------------
+    context = {
+        "title": article_obj.title,
+        "id": article_obj.id,
+        "content": article_obj.content 
+    }
+
+    # Django Templates
+    HTML_STRING = """
+    <h1>Hello {title} (id: {id})</h1>
+    <p> {content}!</p>
+    """.format(**context)
+
+    return HttpResponse(HTML_STRING)
+--------------------------------
+
+and paste in templates.home-view.html
+--------------------------------
+    <h1>Hello {title} (id: {id})</h1>
+    <p> {content}!</p>
+--------------------------------
+
+Now place/replace trydjango.views.py
+--------------------------------
+"""
+To render html web pages
+"""
+import random
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from articles.models import Article
+
+
+def home_view(request):
+    """
+    Take in a request (Django sends request)
+    Return HTML as a respons (We pick to return the respons)
+    """
+    name = "justin"
+    random_id = random.randint(2, 3)
+    article_obj = Article.objects.get(id=random_id)
+
+    article_obj = Article.objects.get(id=random_id)
+
+    context = {
+        "title": article_obj.title,
+        "id": article_obj.id,
+        "content": article_obj.content 
+    }
+
+    # Django Templates
+    HTML_STRING = render_to_string("home-view.html", context=context)
+    # HTML_STRING = """
+    # <h1>Hello {title} (id: {id})</h1>
+    # <p> {content}!</p>
+    #  """.format(**context)
+    return HttpResponse(HTML_STRING)
+--------------------------------
+
+    Change in stetting [DIRS]
+--------------------------------
+            'DIRS': ['templates'],
+--------------------------------
+
+Runserver and view:
+Hello {article_obj.title} (id: {article_obj.id})
+{article_obj.content}!
+The replacements are not processed yet! The substitution is not working yet! You need {{ }}, not { } in the templates.home-views.html file:
+--------------------------------
+<h1>Hello {{ title }} (id: {{ id }})</h1>
+<p> {{ content }}!</p>
+--------------------------------
+Voila: Hello This is my other title (id: 2)
+Hello again
+
+Now create the proper html files:
+base.html
+--------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</head>
+</html>
+--------------------------------
+
+home-view.html
+--------------------------------
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Hello {{ title}} (id: {{ id }})</h1>
+<p> {{ content }}!</p>
+{% endblock content %}  
+--------------------------------
+
+Make templates known in settings.py
+--------------------------------
+...
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+print("BASE_DIR", BASE_DIR)
+...
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            BASE_DIR / "templates"
+        ],
+...
+--------------------------------
+
+The latest code for trydjango.views.py
+--------------------------------
+"""
+To render html web pages
+"""
+import random
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from articles.models import Article
+
+
+def home_view(request):
+    """
+    Take in a request (Django sends request)
+    Return HTML as a respons (We pick to return the respons)
+    """
+    name = "justin"
+    random_id = random.randint(2, 3)
+    article_obj = Article.objects.get(id=random_id)
+
+    article_obj = Article.objects.get(id=random_id)
+
+    context = {
+        "title": article_obj.title,
+        "id": article_obj.id,
+        "content": article_obj.content 
+    }
+
+    # Django Templates
+    HTML_STRING = render_to_string("home-view.html", context=context)
+    # HTML_STRING = """
+    # <h1>Hello {title} (id: {id})</h1>
+    # <p> {content}!</p>
+    #  """.format(**context)
+    return HttpResponse(HTML_STRING)
+    --------------------------------
+
+    NOW you know how the Django Model-View-Template MVT-system works!!!!!!!!!!!!!!!
