@@ -417,3 +417,193 @@ def home_view(request):
     --------------------------------
 
     NOW you know how the Django Model-View-Template MVT-system works!!!!!!!!!!!!!!!
+
+Video 18 Lists of articles
+articles.models.py
+--------------------------------
+from django.db import models
+
+# Create your models here.
+class Article(models.Model):
+    title = models.TextField()
+    content = models.TextField()
+--------------------------------
+trydjango.views.py
+--------------------------------
+"""
+To render html web pages
+"""
+import random
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from articles.models import Article
+
+
+def home_view(request):
+    """
+    Take in a request (Django sends request)
+    Return HTML as a respons (We pick to return the respons)
+    """
+    name = "justin"
+    random_id = random.randint(2, 3)
+    article_obj = Article.objects.get(id=random_id)
+    article_queryset = Article.objects.all()
+    context = {
+        "object_list": article_queryset,
+        "object": article_obj,
+        "title": article_obj.title,
+        "id": article_obj.id,
+        "content": article_obj.content 
+    }
+
+    # Django Templates
+    HTML_STRING = render_to_string("home-view.html",
+    context=context)
+    # HTML_STRING = """
+    # <h1>Hello {title} (id: {id})</h1>
+    # <p> {content}!</p>
+    #  """.format(**context)
+    return HttpResponse(HTML_STRING)
+--------------------------------
+Templates: base.html
+--------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</head>
+</html>
+--------------------------------
+Templates: Home-view.html
+--------------------------------
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Hello {{ object.title}} (id: {{ id }})!</h1>
+<p> {{ content }}!</p>
+
+<ul>
+    {% for x in object_list %}
+        {% if x.title %}
+            <li><a href='/articles/{{ x.id }}/'>{{ x.title }} - 
+            {{ x.content }}</a></li>
+        {% endif %}
+    {% endfor %}        
+</ul>
+
+{% endblock content %}
+--------------------------------
+
+    Hello This is my other title (id: 2)!
+
+Hello again!
+
+    This is my first title - Hello world
+    This is my other title - Hello again
+    Another title - some more content
+    This is my first title - Hello world
+
+Video 19 URL dynamic routing
+How to dynamically route user input of URLs? We have to indicate this at the project-level trydjango.urls.py because the same is used in all apps.
+
+Start trydjango.urls.py
+--------------------------------
+urlpatterns = [
+    path('', home_view),
+    path('admin/', admin.site.urls),
+]
+--------------------------------
+change trydjango.urls.py to:
+--------------------------------
+from django.contrib import admin
+from django.urls import path, re_path
+
+from .views import home_view
+
+urlpatterns = [
+    path('', home_view),
+    path('articles/<int:id>/', home_view), # new version, error correctionline 17  with path, +re_path
+    path('admin/', admin.site.urls),
+]
+--------------------------------
+
+In trydjango.views.py, you have to add *args, **kwargs
+--------------------------------
+    path('', home_view),
+    path('articles/<int:id>/', home_view), # new version, error correctionline 17  with path, +re_path
+    path('admin/', admin.site.urls),
+--------------------------------
+
+The python problem is solved in django by the *args, **kwargs!
+
+This can be compacted by and you can place this code into the articles.views.py for use in all apps! That is as I understand this.
+
+Now final codes:
+articles.views.py
+--------------------------------
+from django.shortcuts import render
+
+from .models import Article #class
+
+# Create your views here.
+def article_detail_view(request, id=None):
+    article_obj = None
+    if id is not None:
+        article_obj = Article.objects.get(id=id)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/details.html",
+    context=context)
+--------------------------------
+trydjango.urls.py
+--------------------------------
+from django.contrib import admin
+from django.urls import path, re_path
+
+from articles import views
+from .views import home_view
+
+urlpatterns = [
+    path('', home_view),
+    path('articles/<int:id>/', views.article_detail_view), # new version, error correctionline 17  with path, +re_path
+    path('admin/', admin.site.urls),
+]
+--------------------------------
+Error in browser: Exception Value: articles/details.html
+Solution of course: Create templates\articles\details.html
+Create details.html
+--------------------------------
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ object.title }}</h1>
+<p>{{ object.content }}</p>
+
+{% endblock content %}
+--------------------------------
+
+The server gives at: http://127.0.0.1:8000/articles/2/ 
+Hello World
+This is my other title
+Hello again
+
+Back to home page http://127.0.0.1:8000/
+gives error home_view() missing 1 required positional argument: 'id'
+
+SOLUTION:
+place in trydrango.views.py line 9 None in line:
+--------------------------------
+def home_view(request, id=None, *args, **kwargs): 
+--------------------------------
+
+http://127.0.0.1:8000/ is showing the details now!
+
+Lessons learned are:
+1. The path URL first: with arbitrary number like <int:id> or <int:year> etc..
+2. The view folloes and needs to handle the arguments (..view(request, id=None)
+3. Last, render the view in detail.html

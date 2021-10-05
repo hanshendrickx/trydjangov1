@@ -1,6 +1,14 @@
 from django.shortcuts import render
 
+from .models import Article #class
+
 # Create your views here.
-class Article(models.Model):
-    title = models.CharField()
-    content = models.TextField()
+def article_detail_view(request, id=None):
+    article_obj = None
+    if id is not None:
+        article_obj = Article.objects.get(id=id)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/details.html",
+    context=context)
