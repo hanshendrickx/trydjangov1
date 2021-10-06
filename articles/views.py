@@ -4,6 +4,7 @@ from .models import Article #class
 
 # Create your views here.
 def article_search_view(request):
+    print(dir(equest))
     context = {}
     return render(request, "articles/search.html", 
     context=context)
