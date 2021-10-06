@@ -655,3 +655,20 @@ admin.site.register(Article, ArticleAdmin)
 --------------------------------
 The 'title' is the place where we can indicate the list of columns.
 You have to CTRL-C and restart the server to view the changes!!!!!!!!!!
+
+Video 22 Create search form in base.html
+--------------------------------
+        <h1>Hello World</h1>
+        <form action=''>
+            <input type='text' name='q'/>
+            <input type='submit'/>
+        </form>
+--------------------------------
+http://127.0.0.1:8000/?q=abc results typing abc in search text field
+
+What URL and What view is handling this request? action='' to our route http://127.0.0.1:8000/?q=abc results typing abc in search text field
+
+--------------------------------
+        <form action='https://www.google.com/'>
+--------------------------------
+Action leads towards google https://www.google.com/?q=Try+Django
