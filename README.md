@@ -656,7 +656,9 @@ admin.site.register(Article, ArticleAdmin)
 The 'title' is the place where we can indicate the list of columns.
 You have to CTRL-C and restart the server to view the changes!!!!!!!!!!
 
-Video 22 Create search form in base.html
+Video 22 
+STEP 1
+Create search form in base.html
 --------------------------------
         <h1>Hello World</h1>
         <form action=''>
@@ -672,3 +674,21 @@ What URL and What view is handling this request? action='' to our route http://1
         <form action='https://www.google.com/'>
 --------------------------------
 Action leads towards google https://www.google.com/?q=Try+Django
+
+STEP 2
+Create view in articles/views.py
+--------------------------------
+# Create your views here.
+def article_search_view(request):
+    context = {}
+    return render(request, "articles/search.html", 
+    context=context)
+...
+--------------------------------
+
+STEP 3
+Create views for search.html
+--------------------------------
+
+
+--------------------------------
