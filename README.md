@@ -607,3 +607,16 @@ Lessons learned are:
 1. The path URL first: with arbitrary number like <int:id> or <int:year> etc..
 2. The view folloes and needs to handle the arguments (..view(request, id=None)
 3. Last, render the view in detail.html
+
+Video 20 The admin
+https://www.youtube.com/watch?v=Y2oDKZ7tqn4&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=20&t=2s
+
+identital commands:
+python manage.py == python -m django == django-admin
+
+I already created a superuser before (Video 20 presents that only at this time)
+Create a sample customer and view the built in functionalities and the standard groups.
+
+Video 21 Register Model in the Admin
+https://www.youtube.com/watch?v=d1kU_rXX-pA&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=21
+
