@@ -620,3 +620,38 @@ Create a sample customer and view the built in functionalities and the standard 
 Video 21 Register Model in the Admin
 https://www.youtube.com/watch?v=d1kU_rXX-pA&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=21
 
+Go to C:\Users\hansh\anaconda3\envs\Django-Try-V1\trydjangov1\articles\admin.py
+--------------------------------
+from django.contrib import admin
+
+# Register your models here.
+# Create your models here.
+from .models import Article
+
+admin.site.register
+--------------------------------
+
+If needed close CTRL-C server, open again and view the admin at http://127.0.0.1:8000/admin/
+You will view the Articles added!
+
+So far we have all code in place to handle CONTENT:
+Create
+Maintain
+Show
+
+Now create a list to have a more friendly presentation:
+--------------------------------
+from django.contrib import admin
+
+# Register your models here.
+# Create your models here.
+from .models import Article
+
+class ArticleAdmin(admin.ModelAdmin):
+   list_display = ['id', 'title']
+   search_fields = ['title', 'content']
+   
+admin.site.register(Article, ArticleAdmin)
+--------------------------------
+The 'title' is the place where we can indicate the list of columns.
+You have to CTRL-C and restart the server to view the changes!!!!!!!!!!
