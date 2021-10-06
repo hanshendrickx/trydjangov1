@@ -680,6 +680,8 @@ Create view in articles/views.py
 --------------------------------
 # Create your views here.
 def article_search_view(request):
+    # print(dir(request))  <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>
+    print(request.GET)
     context = {}
     return render(request, "articles/search.html", 
     context=context)
@@ -689,6 +691,44 @@ def article_search_view(request):
 STEP 3
 Create views for search.html
 --------------------------------
+from django.shortcuts import render
 
+from .models import Article #class
 
---------------------------------
+# Create your views here.
+def article_search_view(request):
+    # print(dir(request))  <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>
+    print(request.GET)
+    query_dict = request.GET # this is a dictionary
+    query = query_dict.get("q") # <input type='text' name='q' />
+    article_obj = None
+    if query is not None:
+        article_obj = Article.objects.get(id=query)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/search.html", 
+    context=context)
+
+def article_detail_view(request, id=None):
+    article_obj = None
+    if id is not None:
+        article_obj = Article.objects.get(id=id)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/details.html",
+    context=context)
+-------------------------------- 
+At query for 3 leads to http://127.0.0.1:8000/articles/?q=2. If not available search we get an exception 32323 Query does not exist.
+Hello World
+This is my other title
+
+Hello again
+
+Correction of visibility in search.page only: go to base.html file: 
+    <body>
+        <h1>Hello World</h1>
+        <form action='/articles/' method='GET'> #only visible in articles.x.html files
+
+Video 23
