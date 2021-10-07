@@ -731,4 +731,147 @@ Correction of visibility in search.page only: go to base.html file:
         <h1>Hello World</h1>
         <form action='/articles/' method='GET'> #only visible in articles.x.html files
 
-Video 23
+Video 23 Create article HTML form in templates/../create.html 
+https://www.youtube.com/watch?v=I1XHYphBLKg&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=23
+
+STEP 1 Copy Paste detail.html in create.html
+-------------------------------- 
+{% extends "base.html" %}
+
+    {% block content %}
+
+<div style='margin-top:30px;'>
+    <form action='/articles/create/' method="POST" >
+        {% csrf_token %} 
+        <div><input type='text' name='title' placeholder='Article Titel' /></div>
+        <br/>
+        <div><textarea name='content' placeholder='Content' > </textarea></div>
+        <br/>
+        <button type='submit'>Create the article</button>
+    </form>
+</div>
+
+    {% endblock content %}
+-------------------------------- 
+STEP 2 Create the view in articles.views.py by copying def article_detail_view and changing the code
+-------------------------------- 
+def article_create_view(request):
+    print(request.POST)
+    context = {}
+    return render(request, "articles/create.html",
+    context=context) 
+
+def article_detail_view(request, id=None):
+...
+-------------------------------- 
+STEP 3 add url in trydjango.urls.py
+-------------------------------- 
+...
+    path('articles/', views.article_search_view), 
+    path('articles/create/', views.article_create_view),   
+...    
+-------------------------------- 
+Run server by python manage.py runserver and view the functionalities:
+http://127.0.0.1:8000/articles/create/ 
+
+STEP 4 Forbidden (403) call needs solving:
+In the template, there is a {% csrf_token %} template tag inside each POST form that targets an internal URL.
+Security to block sources other then I. Read the resolution.
+We use the {% csrf_token %}
+
+Changes are made in above code resulting into:
+[07/Oct/2021 10:16:23] "POST /articles/create/ HTTP/1.1" 200 782
+<QueryDict: {'csrfmiddlewaretoken': ['6uqSuOQyDTHqViRfaNqHc23y1eBwBVCeFizLdn8hv8DDHtfXsscI8rG4S785ejvu'], 'title': ['My titel'], 'content': ['bbbbbbbbbb ']}>
+[07/Oct/2021 10:16:37] "POST /articles/create/ HTTP/1.1" 200 782
+
+Al this is part of Django's security System that is built in!!!!!!!
+
+Other ERROR: MultiValueDictKeyError at /articles/create/ solved by adding:
+-------------------------------- 
+    title = request.POST.get['title']
+    content = request.POST.get['content']
+    print(title, content)
+-------------------------------- 
+
+FINAL CODEs VIDEO 23
+articles.views.py
+-------------------------------- 
+from django.shortcuts import render
+
+from .models import Article #class
+
+# Create your views here.
+def article_search_view(request):
+    # print(dir(request))  <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>
+    print(request.GET)
+    query_dict = request.GET # this is a dictionary
+    query = query_dict.get("q") # <input type='text' name='q' />
+# update query for not only the numbers(id)
+    try:
+        query = int( query_dict.get("q"))
+    except:
+        query = None    
+    article_obj = None
+    if query is not None:
+        article_obj = Article.objects.get(id=query)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/search.html", 
+    context=context)
+
+def article_create_view(request):
+    # print(request.POST)
+    context = {} #this needs here to keep viewing the post's text PLUS lines context[..] below in this block
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        print(title, content)
+        article_object = Article.objects.create(title=title, 
+        content=content)
+        context['object'] = article_object # this allows condition of If not created then..
+        context['created'] = True      
+    return render(request, "articles/create.html",
+    context=context) 
+
+def article_detail_view(request, id=None):
+    article_obj = None
+    if id is not None:
+        article_obj = Article.objects.get(id=id)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/details.html",
+    context=context)
+-------------------------------- 
+
+create.html
+-------------------------------- 
+{% extends "base.html" %}
+
+    {% block content %}
+
+    {% if not created %}
+<div style='margin-top:30px;'>
+    <form action='/articles/create/' method="POST" >
+        {% csrf_token %}
+        <div><input type='text' name='title' placeholder='Article Titel' /></div>
+        <br/>
+        <div><textarea name='content' placeholder='Content' > </textarea></div>
+        <br/>
+        <button type='submit'>Create the article</button>
+    </form>
+</div>
+{% else %}
+<p>Your article was created.</p>
+<a href='/articles/{{ object.id }}/'>{{ object.title }} - {{ object.content }}
+</a>
+
+{% endif %}
+
+    {% endblock content %}
+-------------------------------- 
+
+Video 24 Login View
+https://www.youtube.com/watch?v=Pc4SF7bSkMs&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=24
+
