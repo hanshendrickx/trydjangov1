@@ -7,8 +7,11 @@
             <input type='text' name='q'/>
             <input type='submit'/>
         </form>
-        {% block content %}
-        {% endblock content %}
+        <div class='container'></div>
+    {% block content %}
+        <h3>This will be substituted</h3> 
+    {% endblock content %}
+       </div>
     </body>
 </head>
 </html>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style='margin-top:30px' >
+    <form method='POST'>{% csrf_token %}
+        {% if error %}
+        <p style='color:red'>{{ error }}</p>
+        {% endif %}
+        <div>
+            <input type='text' name='username' placeholder='username' />
+        </div>
+        <div>
+            <input type='password' name='password' placeholder='password' />                
+        </div>
+        <button type='submit'>Login</button>
+    </form>
+</div>
+{% endblock content %}
+
+
+Video 25 Logout
+https://www.youtube.com/watch?v=66abhpAxMgQ&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=25

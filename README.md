@@ -874,4 +874,148 @@ create.html
 
 Video 24 Login View
 https://www.youtube.com/watch?v=Pc4SF7bSkMs&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=24
+STEP 1 Create app accounts
+-------------------------------- 
+python manage.py startapp accounts
+-------------------------------- 
 
+STEP 2 Create templates/accounts/login.html with code: (compare to the create.html file)
+-------------------------------- 
+(% extends "base.html" %)
+
+(% block content %)
+<div style='margin-top:30px' >
+    <form method='POST'>
+        {% csrf_token %}
+        <div>
+            <input type='text' name='username' placeholder='username' />
+        </div>
+        <div>
+            <input type='text' name='password' placeholder='username' />                
+        </div>
+        <button type='submit'>Login</button>
+    </form>
+</div>
+
+(% endblock %)
+-------------------------------- 
+
+STEP 3 Register accounts in the INSTALLED APPS settings.py:
+-------------------------------- 
+    'articles',
+    'accounts',
+-------------------------------- 
+
+Runserver and look at it:
+Open http://127.0.0.1:8000/admin/auth/ the Django Default Authetication
+
+STEP 4 Define login_view in accounts.views
+-------------------------------- 
+from django.contrib.auth import authenticate, login 
+from django.shortcuts import render, redirect
+
+# Create your views here.
+def login_view(request):
+    if request.method == "POST": 
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        # print(username, password) remove these kind of lines in production!!!
+        user = authenticate(request, username=username,
+        password=password)
+        if user is None:
+            context = {"error": "You used an invalid username of password."}
+            return render(request, "accounts/login.html", context)
+        login(request, user)  
+        return redirect('/') #add /admin > / home-view redirect to render, redirect
+    return render(request, "accounts/login.html", {})
+
+
+def logout_view(request):
+    return render(request, "accounts/logout.html", {})
+
+def register_view(request):
+    return render(request, "accounts/register.html", {})
+
+--------------------------------    
+
+STEP 5 bring url in trydjangov1.urls.py, place before path('articles'...)
+-------------------------------- 
+from django.contrib import admin
+from django.contrib.admin.sites import site
+from django.urls import path, re_path
+
+from accounts.views import login_view
+from articles.views import (
+    article_search_view, 
+    article_create_view,     
+    article_detail_view
+) # this is the special way this author like to import the views systematiclly
+from .views import home_view
+
+urlpatterns = [ #use alphabetical order
+    path('', home_view),
+    path('articles/', article_search_view), 
+    path('articles/create/', article_create_view),     
+    path('articles/<int:id>/', article_detail_view),
+    path('admin/', admin.site.urls),
+    path('login/', login_view),
+]
+-------------------------------- 
+Runserver and view
+http://127.0.0.1:8000/login/
+http://127.0.0.1:8000/admin/auth/user/
+
+
+STEP 6 Autheticate the user before continue the login
+Django will take of that by adding to accounts.views.py
+adjust accounts.views.py
+--------------------------------
+from django.contrib.auth import authenticate, login 
+from django.shortcuts import render
+
+# Create your views here.
+from django.contrib.auth import authenticate, login 
+from django.shortcuts import render, redirect
+
+# Create your views here.
+def login_view(request):
+    if request.method == "POST": 
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        # print(username, password) remove these kind of lines in production!!!
+        user = authenticate(request, username=username,
+        password=password)
+        if user is None:
+            context = {"error": "You used an invalid username of password."}
+            return render(request, "accounts/login.html", context)
+        login(request, user)  
+        return redirect('/') #add /admin > / home-view redirect to render, redirect
+    return render(request, "accounts/login.html", {})
+
+
+def logout_view(request):
+    return render(request, "accounts/logout.html", {})
+
+def register_view(request):
+    return render(request, "accounts/register.html", {})
+
+-------------------------------- 
+
+in login.html
+-------------------------------- 
+<div style='margin-top:30px' >
+    <form method='POST'>{% csrf_token %}
+        {% if error %}
+        <p style='color:red'>{{ error }}</p>
+        {% endif %}
+        <div>
+-------------------------------- 
+
+STEP 7 The user is autheticated. Now needs to be actually loged in:
+in accounts vew add
+-------------------------------- 
+        print(user)
+        login(request, user)    
+    return render(request, "accounts/login.html", {})
+-------------------------------- 
+error about CSRF: {% csrf_token %}  misspelled csrf-token)
