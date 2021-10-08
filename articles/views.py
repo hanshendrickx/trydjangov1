@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from .models import Article #class
@@ -21,6 +22,10 @@ def article_search_view(request):
     }
     return render(request, "articles/search.html", 
     context=context)
+
+@login_required
+# in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
+
 
 def article_create_view(request):
     # print(request.POST)

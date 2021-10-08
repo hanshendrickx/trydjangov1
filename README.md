@@ -1110,4 +1110,28 @@ urlpatterns = [ #use alphabetical order
 ]
 --------------------------------
 
-Video 26 26 - Creating a User Required 
+Video 26 26 - Creating a User-Required 
+We want users to MUST be logedin before entering articles
+
+Go to articles.vies.py ad code
+STEP 1 Django has general way of allowing access for part: decorators clled login-required
+https://docs.djangoproject.com/en/3.2/ref/contrib/auth/
+--------------------------------
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+....
+@login_required row 24-28 region
+--------------------------------
+
+STEP 2
+https://docs.djangoproject.com/en/3.2/ref/settings/#auth look for login_URL
+And plce this code in settings.py
+--------------------------------
+
+ROOT_URLCONF = 'trydjango.urls'
+LOGIN_URL='/login/'
+--------------------------------
+Goping to 127.0.0.1:8000/articles/create/ leads you to the login page!
+URL will be http://127.0.0.1:8000/login/?next=/articles/create/
+Security demands that you go to login, login and not directly to the create_page for creating articles.
+
