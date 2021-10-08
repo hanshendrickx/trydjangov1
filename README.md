@@ -1019,3 +1019,95 @@ in accounts vew add
     return render(request, "accounts/login.html", {})
 -------------------------------- 
 error about CSRF: {% csrf_token %}  misspelled csrf-token)
+
+
+Video 25 Logout
+https://www.youtube.com/watch?v=66abhpAxMgQ&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=25
+In settings.py you'll find 'contect_processors' by which Django handles a lot features. A lot has been built in already.
+
+STEP 1 two ways, we use Django way here: accounts.login.html:
+-------------------------------- 
+...
+{% if not request.user.is_authenticated %}<div style='margin-top:30px' >
+    <form method='POST'>{% csrf_token %}
+....
+....
+</div>
+{% else %}
+<p>You're already logged in. Would you like to <a href='/logout/'>logout</a>?</p>
+{% endif %}
+{% endblock content %}
+...
+-------------------------------- 
+
+STEP 2 create logout.html
+-------------------------------- 
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}<div style='margin-top:30px' >
+    <form method='POST'>{% csrf_token %}
+            <p>Are you sure you want to log out?</p>
+            <button type='submit'>Yes, logout.</button>
+    </form>
+</div>
+{% else %}
+<p>You're not logged in. Would you like to <a href='/login/'>login</a>?</p>
+{% endif %}
+{% endblock content %}
+-------------------------------- 
+
+STEP 3 change accounts.views.py
+--------------------------------
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("/login/")
+    return render(request, "accounts/logout.html", {})
+--------------------------------
+
+STEP 4 go to trydjangov1.urls.py
+--------------------------------
+"""trydjango URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/3.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.contrib.admin.sites import site
+from django.urls import path, re_path
+
+from accounts.views import (
+    login_view,
+    logout_view
+)
+from articles.views import (
+    article_search_view, 
+    article_create_view,     
+    article_detail_view
+) # this is the special way this author like to import the views systematiclly
+from .views import home_view
+
+urlpatterns = [ #use alphabetical order
+    path('', home_view),
+    path('articles/', article_search_view), 
+    path('articles/create/', article_create_view),     
+    path('articles/<int:id>/', article_detail_view),
+    path('admin/', admin.site.urls),
+    path('login/', login_view),
+    path('logout/', logout_view),
+]
+--------------------------------
+
+Video 26 26 - Creating a User Required 
