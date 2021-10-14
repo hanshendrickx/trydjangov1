@@ -1244,3 +1244,31 @@ STEP 3 Place the form into the create.html:
 CTRL C runserver:
 Seems top work fine t this point! Video 27 img Section A
 
+create.html   
+--------------------------------
+{% extends "base.html" %}
+
+    
+{% block content %}
+
+{% if not created %}
+
+
+
+<div style='margin-top:30px;'>
+    <form action='/articles/create/' method="POST" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type='submit'>Create the article</button>
+    </form>
+</div>
+{% else %}
+<p>Your article was created.</p>
+<a href='/articles/{{ object.id }}/'>{{ object.title }} - {{ object.content }}
+</a>
+
+{% endif %}
+
+    {% endblock content %}    
+--------------------------------
+Now CTRL-C You will view in http://127.0.0.1:8000/articles/create/ only 1 time the totle and content!
