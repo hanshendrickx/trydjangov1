@@ -31,6 +31,7 @@ def article_create_view(request):
     }
     if request.method == "POST":
         form = ArticleForm(request.POST)
+        context['form'] = form
         if form.is_valid():
             title = form.cleaned_data.get("title")
             content = form.cleaned_data.get("content")

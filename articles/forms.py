@@ -8,6 +8,8 @@ class ArticleForm(forms.Form):
         cleaned_data = self.cleaned_data
         print("cleande_data", cleaned_data)
         title = cleaned_data.get("title")
+        if title.lower().strip() == "the office":
+            raise forms.ValidationError('This title is taken.')
         print("title", title)
         return title
 
