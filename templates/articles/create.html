@@ -8,10 +8,10 @@
 
 
 <div style='margin-top:30px;'>
-    <form action='/articles/create/' method="POST" >
+    <form action='.' method="POST" >
         {% csrf_token %}
         {{ form.as_p }}
-        <button type='submit'>Create the article</button>
+        <button type='submit'>Create article</button>
     </form>
 </div>
 {% else %}

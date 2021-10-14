@@ -7,7 +7,6 @@ from .models import Article
 # Create your views here.
 def article_search_view(request):
     # print(dir(request))  <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>
-    print(request.GET)
     query_dict = request.GET # this is a dictionary
     query = query_dict.get("q") # <input type='text' name='q' />
     try:
@@ -25,22 +24,20 @@ def article_search_view(request):
 @login_required
 # in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
 def article_create_view(request):
-    # print(request.POST)
     form = ArticleForm()
     print(dir(form))
     context = {
         "form": form
-    } #this needs here to keep viewing the post's text PLUS lines context[..] below in this block
+    }
     if request.method == "POST":
-        title = request.POST.get("title")
-        content = request.POST.get("content")
-        print(title, content)
-        article_object = Article.objects.create(title=title, 
-        content=content)
-        context['object'] = article_object # this allows condition of If not created then..
-        context['created'] = True      
-    return render(request, "articles/create.html",
-    context=context) 
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data.get("title")
+            content = form.cleaned_data.get("content")
+            article_object = Article.objects.create(title=title, content=content)
+            context['object'] = article_object
+            context['created'] = True      
+    return render(request, "articles/create.html", context=context) 
 
 def article_detail_view(request, id=None):
     article_obj = None
