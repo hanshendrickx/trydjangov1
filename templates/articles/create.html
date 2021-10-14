@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
-    {% block content %}
+    
+{% block content %}
 
-    {% if not created %}
+{% if not created %}
+
+{{ form.as_p }}
+
 <div style='margin-top:30px;'>
     <form action='/articles/create/' method="POST" >
         {% csrf_token %}

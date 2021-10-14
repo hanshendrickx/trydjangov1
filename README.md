@@ -1135,3 +1135,112 @@ Goping to 127.0.0.1:8000/articles/create/ leads you to the login page!
 URL will be http://127.0.0.1:8000/login/?next=/articles/create/
 Security demands that you go to login, login and not directly to the create_page for creating articles.
 
+Video 27 NL
+27 - Basic Django Forms - Python & Django 3.2 Tutorial Series
+https://www.youtube.com/watch?v=QEhmd_hnjKU&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=27
+
+Step 1 Is to handle the article_create_view(request) so we avoid repeatings + validate
+Create articles.forms.py 
+--------------------------------
+from django import forms
+
+class ArticleForm(forms.Form):
+    title = forms.CharField()
+    content = forms.CharField()
+--------------------------------
+
+STEP 2 Import this in articles.views.py:
+--------------------------------
+from .forms import ArticleForm
+.....
+# initiate that ArticleForm in the create.view
+.....
+@login_required
+# in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
+def article_create_view(request):
+    # print(request.POST)
+    context = {
+        "form": ArticleForm()
+    }
+--------------------------------
+#code up to now:
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+from .forms import ArticleForm
+from .models import Article
+
+# Create your views here.
+def article_search_view(request):
+    # print(dir(request))  <<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>
+    print(request.GET)
+    query_dict = request.GET # this is a dictionary
+    query = query_dict.get("q") # <input type='text' name='q' />
+    try:
+        query = int( query_dict.get("q"))
+    except:
+        query = None    
+    article_obj = None
+    if query is not None:
+        article_obj = Article.objects.get(id=query)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/search.html", context=context)
+
+@login_required
+# in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
+def article_create_view(request):
+    # print(request.POST)
+    form = ArticleForm()
+    print(dir(form))
+    context = {
+        "form": form
+    } #this needs here to keep viewing the post's text PLUS lines context[..] below in this block
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        print(title, content)
+        article_object = Article.objects.create(title=title, 
+        content=content)
+        context['object'] = article_object # this allows condition of If not created then..
+        context['created'] = True      
+    return render(request, "articles/create.html",
+    context=context) 
+
+def article_detail_view(request, id=None):
+    article_obj = None
+    if id is not None:
+        article_obj = Article.objects.get(id=id)
+    context = {
+        "object": article_obj,
+    }
+    return render(request, "articles/details.html",
+    context=context)
+--------------------------------    
+CTRL-C runserver: ERROR
+in <module>
+    from .forms import ArticleForm
+ModuleNotFoundError: No module named 'articles.forms'
+CONTINUE CODING follow the video up to the point with above code
+
+STEP 3 Place the form into the create.html:
+--------------------------------
+{% extends "base.html" %}
+
+    
+{% block content %}
+
+{% if not created %}
+
+{{ form.as_p }}
+
+<div style='margin-top:30px;'>
+    <form action='/articles/create/' method="POST" >
+        {% csrf_token %}
+    
+--------------------------------
+
+CTRL C runserver:
+Seems top work fine t this point! Video 27 img Section A
+

@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from .models import Article #class
+from .forms import ArticleForm
+from .models import Article
 
 # Create your views here.
 def article_search_view(request):
@@ -9,7 +10,6 @@ def article_search_view(request):
     print(request.GET)
     query_dict = request.GET # this is a dictionary
     query = query_dict.get("q") # <input type='text' name='q' />
-# update query for not only the numbers(id)
     try:
         query = int( query_dict.get("q"))
     except:
@@ -20,16 +20,17 @@ def article_search_view(request):
     context = {
         "object": article_obj,
     }
-    return render(request, "articles/search.html", 
-    context=context)
+    return render(request, "articles/search.html", context=context)
 
 @login_required
 # in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
-
-
 def article_create_view(request):
     # print(request.POST)
-    context = {} #this needs here to keep viewing the post's text PLUS lines context[..] below in this block
+    form = ArticleForm()
+    print(dir(form))
+    context = {
+        "form": form
+    } #this needs here to keep viewing the post's text PLUS lines context[..] below in this block
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
