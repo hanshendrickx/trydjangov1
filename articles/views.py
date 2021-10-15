@@ -24,17 +24,15 @@ def article_search_view(request):
 
 @login_required
 def article_create_view(request):
-    # print(request.POST)
     form = ArticleForm(request.POST or None)
     context = {
         "form": form
     }
     if form.is_valid():
-        title = form.cleaned_data.get("title")
-        content = form.cleaned_data.get("content")
-        article_object = Article.objects.create(title=title, content=content)
-        context['object'] = article_object
-        context['created'] = True      
+        article_object = form.save()
+        context['form'] = Article() # clears data in the fields
+        # context['object'] = article_object
+        # context['created'] = True      
     return render(request, "articles/create.html", context=context) 
 
 # in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
