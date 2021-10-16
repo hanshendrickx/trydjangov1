@@ -30,8 +30,8 @@ def article_create_view(request):
     }
     if form.is_valid():
         article_object = form.save()
-        context['object'] = article_object
-        context['created'] = True
+        context['form'] = ArticleForm()
+        # context['created'] = True
     return render(request, "articles/create.html", context=context) 
 
 # in settings.py ad after ROOT_URLCONF = , LOGIN_URL='/login/'
