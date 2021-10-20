@@ -1349,3 +1349,67 @@ def article_detail_view(request, id=None):
     return render(request, "articles/details.html",
     context=context)
 --------------------------------
+
+Video  29  Register a User via built in Model Form
+https://www.youtube.com/playlist?list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL
+https://www.youtube.com/watch?v=j5ejoA5eenQ&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=29
+
+Step 1 accounts.view.py add 2nd row
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.forms import UserCreationForm 
+
+Step 2 in accounts.views.py: add
+def register_view(request):
+    form = UserCreationForm(request.POST or None)
+    if form.is_valid():
+        user_obj = form.save()
+        return redirect('/login')  
+    return render(request, "accounts/register.html", {"form":form})
+
+Step 3 add to import and urls in trydjango.urls.py
+from accounts.views import (
+    login_view,
+    logout_view,
+    register_view
+)
+...
+    path('login/', login_view),
+    path('logout/', logout_view),
+    path('register/', register_view),
+]
+
+Step 4 avoid registering a new user if already logedin
+
+Step 5 create register.html
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% if not request.user.is_authenticated %}
+<div style='margin-top:30px' >
+    <form method='POST'>{% csrf_token %}
+            {{ form.as_p }}
+        <button type='submit'>Register</button>
+    </form>
+    <p>Already have an account? <a href='/login'>please Login</a></p>
+</div>
+{% else %}
+<p>You're already logged. That means you cannot register. Would you like to <a href='/logout/'>logout</a>?</p>
+{% endif %}
+
+{% endblock content %}
+
+STEP 6 
+Adjust login form for the addition of register
+
+    </form>
+    <p>Already have an acocunt? Please <a href='login'>Login</a></p>
+    <p>Need an acocunt? Please <a href='/register'>Register</a></p>
+</div>
+
+Step 7 runserver: ISSUES?
+
+
+
+
