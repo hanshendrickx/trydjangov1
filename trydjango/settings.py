@@ -8,8 +8,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
+ Sample Secret Key:'django-insecure-aa&*1q)#aens*9@q9#h#eq(-@yifz-+i#jur5==svedlddl$-b'
 """
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
