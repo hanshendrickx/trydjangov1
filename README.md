@@ -1410,10 +1410,10 @@ Adjust login form for the addition of register
 
 Step 7 runserver: ISSUES?
 
-
-
 Video  30  Register a User via built in Model Form
 https://www.youtube.com/playlist?list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL
 https://www.youtube.com/watch?v=FBkeVk6km3U&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=30
 
 Video 31 DOTVEN !!!! SECURITY settings.py
+install pip install django-dotenv (use django one )
+changes in settings.py and creation of .env

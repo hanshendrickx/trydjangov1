@@ -10,26 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
  Sample Secret Key:'django-insecure-aa&*1q)#aens*9@q9#h#eq(-@yifz-+i#jur5==svedlddl$-b'
 """
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print("BASE_DIR", BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-aa&*1q)#aens*9@q9#h#eq(-@yifz-+i#jur5==svedlddl$-b'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-aa&*1q)#aens*9@q9#h#eq(-@yifz-+i#jur5==svedlddl$-b')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str(os.environ.get('DEBUG')) == "1" # 1 == True
 
-ALLOWED_HOSTS = []
-
+# ENV_ALLOWED_HOST = os.environ.get('DJANGO_ALLOWED_HOST') or None
+# ALLOWED_HOSTS = []
+# if not DEBUG:
+ALLOWED_HOSTS = ['127.0.0.1', 'local host']
+if not DEBUG:
+    ALLOWED_HOSTS += [os.environ.get('DJANGO_ALLOWED_HOST')]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
