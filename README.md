@@ -1414,6 +1414,22 @@ Video  30  Register a User via built in Model Form
 https://www.youtube.com/playlist?list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL
 https://www.youtube.com/watch?v=FBkeVk6km3U&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=30
 
+
 Video 31 DOTVEN !!!! SECURITY settings.py
 install pip install django-dotenv (use django one )
 changes in settings.py and creation of .env
+
+Video 32 deploy to digital Ocean
+https://www.youtube.com/playlist?list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL
+https://www.youtube.com/watch?v=M9aCNYM_4vQ&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL&index=32
+
+requirements.txt
+runtime.txt
+postgresql connection
+     Environment variables
+     POSTGRE_READY parameters
+create secret key @ run pyton command random_secret_key (this video)
+or https://djecrety.ir/
+
+
+Video 33 Version Control Git GitHub
