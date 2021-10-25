@@ -1,7 +1,7 @@
 asgiref @ file:///tmp/build/80754af9/asgiref_1625643473416/work
 certifi==2021.5.30
 dataclasses==0.8
-Django==3.2.7
+Django>=3.2,<3.3
 django-dotenv
 pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
 sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work

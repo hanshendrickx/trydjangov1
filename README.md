@@ -1418,6 +1418,7 @@ https://www.youtube.com/watch?v=FBkeVk6km3U&list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTE
 Video 31 DOTVEN !!!! SECURITY settings.py
 install pip install django-dotenv (use django one )
 changes in settings.py and creation of .env
+7:29
 
 Video 32 deploy to digital Ocean
 https://www.youtube.com/playlist?list=PLEsfXFp6DpzRMby_cSoWTFw8zaMdTEXgL
@@ -1433,3 +1434,12 @@ or https://djecrety.ir/
 
 
 Video 33 Version Control Git GitHub
+Video 34 deploy to \Dig Ocean
+
+Video 35 Automated Test Basics
+run: python manage.py test
+
+test: secret key
+
+
+
